@@ -52,7 +52,7 @@ min_level = LOG_LEVELS_MAP[args.min_level.upper()]
 
 package = args.package
 
-base_adb_command = ['adb']
+base_adb_command = ['sdb']
 if args.device_serial:
   base_adb_command.extend(['-s', args.device_serial])
 if args.use_device:
@@ -176,7 +176,7 @@ BUG_LINE  = re.compile(r'.*nativeGetEnabledTags.*')
 BACKTRACE_LINE = re.compile(r'^#(.*?)pc\s(.*?)$')
 
 adb_command = base_adb_command[:]
-adb_command.append('logcat')
+adb_command.append('dlog')
 adb_command.extend(['-v', 'brief'])
 
 # Clear log before starting logcat
