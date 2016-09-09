@@ -175,6 +175,12 @@ LOG_LINE  = re.compile(r'^([A-Z])/(.+?)\( *(\d+)\): (.*?)$')
 BUG_LINE  = re.compile(r'.*nativeGetEnabledTags.*')
 BACKTRACE_LINE = re.compile(r'^#(.*?)pc\s(.*?)$')
 
+pid_filter = None
+if len(package) > 0:
+  ps_command = base_adb_command + ["shell", "ps -auxww | grep", package[0] + "/bin"]
+  ps_output = subprocess.Popen(ps_command, stdout=PIPE, stderr=PIPE).communicate()[0]
+  pid_filter = ps_output.split("     ")[1].split(" ")[0]
+
 adb_command = base_adb_command[:]
 adb_command.append('dlog')
 adb_command.extend(['-v', 'brief'])
@@ -322,14 +328,15 @@ while adb.poll() is None:
       message = message.lstrip()
       owner = app_pid
 
-  if not args.all and owner not in pids:
-    continue
-  if level in LOG_LEVELS_MAP and LOG_LEVELS_MAP[level] < min_level:
-    continue
-  if args.ignored_tag and tag_in_tags_regex(tag, args.ignored_tag):
-    continue
-  if args.tag and not tag_in_tags_regex(tag, args.tag):
-    continue
+  if pid_filter is not None:
+    if pid_filter != owner:
+      continue
+  # if level in LOG_LEVELS_MAP and LOG_LEVELS_MAP[level] < min_level:
+  #   continue
+  # if args.ignored_tag and tag_in_tags_regex(tag, args.ignored_tag):
+  #   continue
+  # if args.tag and not tag_in_tags_regex(tag, args.tag):
+  #   continue
 
   linebuf = ''
 
