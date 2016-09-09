@@ -16,10 +16,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 '''
 
-# Script to highlight adb logcat output for console
+# Script to highlight sdb dlog output for console
 # Originally written by Jeff Sharkey, http://jsharkey.org/
 # Piping detection and popen() added by other Android team members
 # Package filtering and output improvements by Jake Wharton, http://jakewharton.com
+# Adaptation of original Android script for Tizen development by Chuck Greb, https://github.com/ecgreb
 
 import argparse
 import sys
